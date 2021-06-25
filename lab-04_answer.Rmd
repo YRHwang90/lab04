@@ -1,0 +1,146 @@
+---
+title: "Lab 04 - La Quinta is Spanish for next to Denny's, Pt. 1"
+author: "Insert your name here"
+date: "Insert date here"
+output: github_document
+---
+
+### Load packages and data
+
+```{r load-packages, message = FALSE}
+library(tidyverse) 
+library(dsbox)
+
+githubURL_1 <- "https://github.com/DataScience4Psych/DataScience4Psych/raw/main/data/raw-data/laquinta.rda"
+
+githubURL_2 <- "https://github.com/DataScience4Psych/DataScience4Psych/raw/main/data/raw-data/dennys.rda"
+
+```
+
+```{r load-data, message = FALSE}
+states <- read_csv("data/states.csv")
+```
+
+### Exercise 1,2
+```{r}
+dim(dennys)
+dim(laquinta)
+str(dennys)
+str(laquinta)
+
+glimpse(dennys)
+glimpse(laquinta)
+
+table(laquinta$state)
+```
+
+### Exercise 3
+
+denny - no
+laQuinta -yes 
+...
+
+### Exercise 4
+
+table()
+View()
+
+...
+
+### Exercise 5
+
+```{r}
+dennys%>%
+  filter(!(state %in% states$abbreviation))%>%
+  View()
+
+
+```
+...
+
+### Exercise 6
+```{r}
+dn<-dennys%>%
+  mutate(country=="United states")
+
+
+```
+...
+
+### Exercise 7
+
+```{r}
+laquinta<-laquinta%>%
+  filter(!(state %in% states$abbreviation))%>%
+  View() # should talk to mason 
+
+
+View(laquinta)
+```
+## Exercise8
+
+```{r}
+lq<-laquinta %>%
+  mutate(country = case_when(
+    state %in% state.abb     ~ "United States",
+    state %in% c("ON", "BC") ~ "Canada",
+    state == "ANT"           ~ "Colombia",
+    state == "FM"            ~ "Hondoras",
+    state == "AG"           ~  "Mexico"))  
+
+lq<-lq%>%
+  filter(country=="United States")
+```
+
+## Exercise 9
+
+```{r}
+sort(table(dennys$state))
+sort(table(laquinta$state))
+
+```
+
+## Exercise10
+```{r}
+dennys%>%
+  count(state)%>%
+  inner_join(states,by=c("state"="abbreviation"
+  ))%>%
+  mutate(den_per_sq = 1000*n/area) %>%
+  sort(den_per_sq) %>%
+  View()
+
+dennys<-dennys%>%
+  mutate(estabilishment="den")
+laquinta<-laquinta%>%
+  mutate(establishment = "lq")
+dn_lq<-bind_rows(dennys,laquinta)
+
+ggplot(dn_lq, mapping = aes(x = longitude, y = latitude, color = establishment)) +
+  geom_point()
+
+```
+
+## Exercise 11 
+
+```{r}
+
+dn_lqNC <- dn_lq %>%
+  filter(state == "NC")
+
+ggplot(dn_lqNC, mapping = aes(x = longitude, y = latitude, color = establishment, alpha = .5)) +
+  geom_point()
+
+```
+
+## Exercise 12 
+
+```{r}
+
+dn_lqTX<- dn_lq %>%
+  filter(state == "TX")
+
+
+ggplot(dn_lqNC, mapping = aes(x = longitude, y = latitude, color = establishment, alpha = .5)) +
+  geom_point()
+```
