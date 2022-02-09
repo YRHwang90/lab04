@@ -10,12 +10,9 @@ output: github_document
 ```{r load-packages, message = FALSE}
 library(tidyverse) 
 library(dsbox)
-
-githubURL_1 <- "https://github.com/DataScience4Psych/DataScience4Psych/raw/main/data/raw-data/laquinta.rda"
-
-githubURL_2 <- "https://github.com/DataScience4Psych/DataScience4Psych/raw/main/data/raw-data/dennys.rda"
-
 ```
+
+
 
 ```{r load-data, message = FALSE}
 states <- read_csv("data/states.csv")
@@ -23,8 +20,15 @@ states <- read_csv("data/states.csv")
 
 ### Exercise 1,2
 ```{r}
+ dennys <- dennys
+ laquinta <- laquinta 
+
 dim(dennys)
 dim(laquinta)
+
+# View(dennys)
+# View(laquinta)
+
 str(dennys)
 str(laquinta)
 
@@ -42,8 +46,7 @@ laQuinta -yes
 
 ### Exercise 4
 
-table()
-View()
+state, address, latitude, etc. 
 
 ...
 
@@ -52,7 +55,7 @@ View()
 ```{r}
 dennys%>%
   filter(!(state %in% states$abbreviation))%>%
-  View()
+  print()
 
 
 ```
@@ -60,8 +63,8 @@ dennys%>%
 
 ### Exercise 6
 ```{r}
-dn<-dennys%>%
-  mutate(country=="United states")
+dennys <- dennys %>%
+  dplyr::mutate(country ="United States")
 
 
 ```
@@ -70,17 +73,16 @@ dn<-dennys%>%
 ### Exercise 7
 
 ```{r}
-laquinta<-laquinta%>%
-  filter(!(state %in% states$abbreviation))%>%
-  View() # should talk to mason 
+laquinta %>%
+  filter(!(state %in% states$abbreviation)) %>%
+  print() 
 
 
-View(laquinta)
 ```
 ## Exercise8
 
 ```{r}
-lq<-laquinta %>%
+laquinta<-laquinta %>%
   mutate(country = case_when(
     state %in% state.abb     ~ "United States",
     state %in% c("ON", "BC") ~ "Canada",
@@ -88,7 +90,7 @@ lq<-laquinta %>%
     state == "FM"            ~ "Hondoras",
     state == "AG"           ~  "Mexico"))  
 
-lq<-lq%>%
+laquinta<-laquinta%>%
   filter(country=="United States")
 ```
 
@@ -100,20 +102,33 @@ sort(table(laquinta$state))
 
 ```
 
+DE
+ME
+Actually, I am not familiar with that states..
+
 ## Exercise10
 ```{r}
-dennys%>%
+dennys %>%
+  count(state) %>%
+  inner_join(states,by=c("state" = "abbreviation"
+  )) %>%
+ dplyr::mutate(den_per_sq = 1000*area/n) %>%
+  arrange(den_per_sq)
+
+laquinta %>%
   count(state)%>%
   inner_join(states,by=c("state"="abbreviation"
-  ))%>%
-  mutate(den_per_sq = 1000*n/area) %>%
-  sort(den_per_sq) %>%
-  View()
+  )) %>%
+ dplyr::mutate(den_per_sq = 1000*area/n) %>%
+  arrange(den_per_sq)
 
-dennys<-dennys%>%
-  mutate(estabilishment="den")
-laquinta<-laquinta%>%
+
+dennys <- dennys %>%
+  mutate(establishment="dn")
+
+laquinta <- laquinta%>%
   mutate(establishment = "lq")
+
 dn_lq<-bind_rows(dennys,laquinta)
 
 ggplot(dn_lq, mapping = aes(x = longitude, y = latitude, color = establishment)) +
@@ -128,7 +143,7 @@ ggplot(dn_lq, mapping = aes(x = longitude, y = latitude, color = establishment))
 dn_lqNC <- dn_lq %>%
   filter(state == "NC")
 
-ggplot(dn_lqNC, mapping = aes(x = longitude, y = latitude, color = establishment, alpha = .5)) +
+ggplot(dn_lqNC, mapping = aes(x = longitude, y = latitude,  alpha = 0.5)) +
   geom_point()
 
 ```
@@ -141,6 +156,6 @@ dn_lqTX<- dn_lq %>%
   filter(state == "TX")
 
 
-ggplot(dn_lqNC, mapping = aes(x = longitude, y = latitude, color = establishment, alpha = .5)) +
+ggplot(dn_lqTX, mapping = aes(x = longitude, y = latitude, color = establishment, alpha = .5)) +
   geom_point()
 ```
