@@ -287,8 +287,8 @@ ggplot(dn_lq, mapping = aes(x = longitude, y = latitude, color = establishment))
 dn_lqNC <- dn_lq %>%
   filter(state == "NC")
 
-ggplot(dn_lqNC, mapping = aes(x = longitude, y = latitude, color = establishment, alpha = 0.5)) +
-  geom_point()
+ggplot(dn_lqNC, mapping = aes(x = longitude, y = latitude, color = establishment)) +
+  geom_point(alpha=0.5)
 ```
 
 ![](lab-04_answer_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
@@ -300,8 +300,8 @@ dn_lqTX<- dn_lq %>%
   filter(state == "TX")
 
 
-ggplot(dn_lqTX, mapping = aes(x = longitude, y = latitude, color = establishment, alpha = .5)) +
-  geom_point()
+ggplot(dn_lqTX, mapping = aes(x = longitude, y = latitude, color = establishment)) +
+  geom_point(alpha=0.5)
 ```
 
 ![](lab-04_answer_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
